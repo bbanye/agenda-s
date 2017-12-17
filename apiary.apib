@@ -1,0 +1,258 @@
+FORMAT: 1A
+HOST: http://agenda12.apiblueprint.org/
+
+# Agenda
+
+Agenda is a simple API allowing consumers to schedule meeting on-line
+
+# Group User
+
+Resource operations related to a user in the API.
+
+## User-Key [/v1/user/getkey{?username,password}]
+
++ Parameters
+    - username : `root` (string, required) - User Name
+    - password : `pass` (required)
+
+### Get User Key [GET]
+
+get the key of currently logined user
+
++ Response 200 (application/json)
+
+        {
+            "key":"1",
+            "UserName":"Lisi"
+        }
+
+
+# Group Users
+
+Resources related to a users in the API.
+
+## Users Collection [/v1/allusers]
+
+### List all Users [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "username":"zhang3",
+                "password":"zhang",
+                "email":"zhang3@mail2.sysu.edu.cn"
+                "telephone":"12342431233"
+            },{
+                "username":"li4",
+                "password":"li",
+                "email":"li4@mail2.sysu.edu.cn"
+                "telephone":"1231212123"
+            }
+        ]
+
+### Create a New User [POST]
+
++ Request (application/json)
+
+        {
+            "username":"zhang3",
+            "password":"zhang",
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /users/1
+
+    + Body
+
+            {
+                "id": 1,
+                "username":"zhang3",
+                "password":"zhang",
+                "email":"zhang3@mail2.sysu.edu.cn"
+            }
+
+### Get User by ID [GET /v1/users/{id}]
+
++ Parameters
+    - id : `1` (int, required) - User Name
+
++ Response 200 (application/json)
+
+        {
+            "username":"zhang3",
+            "password":"zhang",
+            "email":"zhang3@mail2.sysu.edu.cn"
+            "telephone":"1231212123"
+        }
+
+
+
+
+# Group Meetings
+
+Resources related to meetings in the API.
+
+## Meetings Action [/v1/meetings{?key}]
+
++ Parameters
+    - key : `1e3576bt` (string, required)
+
+### Create a New Meeting [POST]
+
+You may create a new meeting using this action. It takes a JSON
+object containing a meeting title, collection of participators,
+start time and end time.
+
++ Request (application/json)
+
+        {
+            "title": "Favourite programming language",
+            "participators": [
+                "John",
+                "Marry",
+                "Alice",
+                "Bob"
+            ],
+            "startTime": "2017-12-12",
+            "endTime": "2017-12-13"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "title": "Favourite programming language",
+            "participators": [
+                "John",
+                "Marry",
+                "Alice",
+                "Bob"
+            ],
+            "startTime": "2017-12-12",
+            "endTime": "2017-12-13",
+            "Sponsor": "Jack"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "something required"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "invalid key"
+        }
+
++ Response 503 (application/json)
+
+        {
+            "something wrong"
+        }
+
+### Quit a Meeting [PUT]
+
+You may quit a meeting using this action. It takes a title
+of the meeting as the parameter.
+
++ Request (application/json)
+
+        {
+            "title": "Favourite programming language"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "success"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "something required"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "invalid key"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "title error"
+        }
+
+### Clear Meetings [DELETE]
+
+You may clear all the meetings you sponsored using this action.
+
++ Response 200 (application/json)
+
+        {
+            "success"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "something required"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "invalid key"
+        }
+
+## Meetings Query [/v1/meetings{?key,starttime,endtime}]
+
++ Parameters
+    - key : `1e3576bt` (string, required)
+    - starttime : `2017-12-12` (string, required) - Start Time
+    - endtime : `2017-12-15` (required) - End Time
+
+### Query Meetings [GET]
+
+You may query all the meetings between specific time interval
+using this action. It takes a JSON object containing start time
+and end time of the interval.
+
++ Response 200 (application/json)
+
+        {
+            "title": "Favourite programming language",
+            "participators": [
+                "John",
+                "Marry",
+                "Alice",
+                "Bob"
+            ],
+            "startTime": "2017-12-12",
+            "endTime": "2017-12-13",
+            "Sponsor": "Jack"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "something required"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "invalid key"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "time error"
+        }
